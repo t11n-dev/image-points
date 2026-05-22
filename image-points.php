@@ -7,7 +7,7 @@
 
 /*
 Plugin Name: Image Points
-Plugin URI: https://t11n.dev/
+Plugin URI: https://github.com/t11n-dev/image-points
 Description: Image Points helps you add interactive points to your images.
 Author: T11N
 Version: 1.0.0
