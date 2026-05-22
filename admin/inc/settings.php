@@ -105,7 +105,7 @@ function image_points_callback() {
  */
 function image_points_action_links( $links, $file ) {
 	if ( false !== strpos( $file, 'image-points.php' ) ) {
-		$donate_link = '<a class="image-points-donate-link" href="' . esc_url( 'https://paypal.me/nauhyuh99' ) . '" title="' . esc_attr__( 'Donate', 'image-points' ) . '" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-heart" aria-hidden="true"></span>' . esc_html__( 'Donate', 'image-points' ) . '</a>';
+		$donate_link = '<a class="image-points-donate-link" href="' . esc_url( 'https://paypal.me/nauhyuh99' ) . '" title="' . esc_attr__( 'Donate', 'image-points' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Donate', 'image-points' ) . '</a>';
 		array_unshift( $links, $donate_link );
 	}
 
