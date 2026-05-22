@@ -96,7 +96,11 @@ function image_points_shortcode_func( $atts ) {
 				?>
 				<img src="<?php echo esc_attr( $image_points_main_image ); ?>" alt="<?php echo esc_attr( $alt ); ?>">
 			<?php endif; ?>
+<<<<<<< HEAD
 		</div>
+=======
+		</div>	
+>>>>>>> adfd36e82ddd40c70a55cb4608469da8d0bb6e9c
 		<?php if ( is_array( $data_points ) ) : ?>
 				<?php
 				$stt = 1;foreach ( $data_points as $point ) :
@@ -130,8 +134,15 @@ function image_points_shortcode_func( $atts ) {
 							$point_content = wp_kses( $point_content, $allowed_tags );
 							?>
 				<div class="box_view_html">
+<<<<<<< HEAD
 					<?php echo wp_kses( wpautop( $point_content ), image_points_get_allowed_tags() ); ?>
 				</div>
+=======
+					<span class="close_image_points">
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><path d="M153.7,153.7C57.9,249.5,10,365.3,10,499c0,135.7,47.9,251.5,143.7,347.3l0,0C249.5,942.1,363.3,990,499,990c135.7,0,251.5-47.9,347.3-143.7C942.1,750.5,990,634.7,990,499c0-135.7-47.9-249.5-143.7-345.3l0,0C750.5,57.9,634.7,10,499,10C365.3,10,249.5,57.9,153.7,153.7z M209.6,211.6l2-2C289.4,129.7,387.2,89.8,499,89.8c113.8,0,209.6,39.9,291.4,121.8c79.8,77.8,119.8,175.6,119.8,287.4c0,113.8-39.9,209.6-119.8,291.4C708.6,870.3,612.8,910.2,499,910.2c-111.8,0-209.6-39.9-287.4-119.8C129.8,708.6,89.8,612.8,89.8,499C89.8,387.2,129.8,289.4,209.6,211.6z"/><path d="M293.4,331.3c0,12,4,22,12,29.9L443.1,497L305.4,632.7c-8,8-12,18-12,29.9c0,10,4,18,12,26c8,8,18,12,28,12c12,0,20-4,27.9-10L499,552.9l135.7,137.7c8,6,16,10,28,10c12,0,21.9-4,27.9-10c8-8,12-18,12-28c0-12-4-21.9-12-29.9L554.9,497l135.7-135.7c8-8,12-18,12-27.9c0-12-4-22-12-29.9c-6-8-16-12-25.9-12c-12,0-21.9,4-29.9,12L499,441.1L363.3,303.4c-8-8-18-12-29.9-12c-10,0-20,4-28,12C297.4,311.4,293.4,321.4,293.4,331.3z"/></g></svg></span>
+							<?php echo apply_filters( 'the_content', wpautop( $point_content ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound ?>
+					</div>
+>>>>>>> adfd36e82ddd40c70a55cb4608469da8d0bb6e9c
 							<?php
 			else :
 				$no_tooltip = true;
@@ -139,6 +150,7 @@ function image_points_shortcode_func( $atts ) {
 			?>
 		<?php endif; ?>
 					<?php
+<<<<<<< HEAD
 					$view_html = trim( ob_get_clean() );
 					$point_classes = array(
 						'point_style',
@@ -157,6 +169,12 @@ function image_points_shortcode_func( $atts ) {
 					?>
 		<div class="drag_element tips <?php echo ( $pins_class ) ? esc_attr( $pins_class ) : ''; ?>" style="top:<?php echo esc_attr( $point['top'] ); ?>%;left:<?php echo esc_attr( $point['left'] ); ?>%;" <?php echo ( $pins_id ) ? 'id="' . esc_attr( $pins_id ) . '"' : ''; ?>>
 			<div class="<?php echo esc_attr( implode( ' ', $point_classes ) ); ?>" data-placement="<?php echo esc_attr( $placement ); ?>" data-html='<?php echo esc_attr( $view_html ); ?>'>
+=======
+					$view_html = ob_get_clean();
+					?>
+		<div class="drag_element tips <?php echo ( $pins_class ) ? esc_attr( $pins_class ) : ''; ?>" style="top:<?php echo esc_attr( $point['top'] ); ?>%;left:<?php echo esc_attr( $point['left'] ); ?>%;" <?php echo ( $pins_id ) ? 'id="' . esc_attr( $pins_id ) . '"' : ''; ?>>
+			<div class="point_style <?php echo ( $pins_image_hover ) ? 'has-hover' : ''; ?> image_points_tooltip_html" data-placement="<?php echo esc_attr( $placement ); ?>" data-html="<?php echo esc_attr( $view_html ); ?>">
+>>>>>>> adfd36e82ddd40c70a55cb4608469da8d0bb6e9c
 					<?php
 					if ( $linkpins ) :
 						?>
@@ -164,6 +182,7 @@ function image_points_shortcode_func( $atts ) {
 					<?php if ( 'none' !== $pins_more_option['pins_animation'] ) : ?>
 						<div class="pins_animation image_points_<?php echo esc_attr( $pins_more_option['pins_animation'] ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_left'] ); ?>px;height:<?php echo intval( $pins_more_option['custom_top'] * 2 ); ?>px;width:<?php echo intval( $pins_more_option['custom_left'] * 2 ); ?>px"></div>
 					<?php endif; ?>
+<<<<<<< HEAD
 					<img src="<?php echo esc_attr( $pins_image ); ?>" class="<?php echo esc_attr( implode( ' ', $pins_image_classes ) ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_left'] ); ?>px" alt="<?php echo esc_attr( $pinsalt ); ?>">
 					<?php
 					if ( $pins_image_hover ) :
@@ -173,6 +192,21 @@ function image_points_shortcode_func( $atts ) {
 						}
 						?>
 						<img src="<?php echo esc_attr( $pins_image_hover ); ?>" class="<?php echo esc_attr( implode( ' ', $pins_image_hover_classes ) ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_hover_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_hover_left'] ); ?>px" alt="<?php echo esc_attr( $pinsalt ); ?>"><?php endif; ?>
+=======
+					<img src="<?php echo esc_attr( $pins_image ); ?>" class="pins_image 
+					<?php
+					if ( ! $no_tooltip ) :
+						?>
+						image_points_hastooltip<?php endif; ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_left'] ); ?>px" alt="<?php echo esc_attr( $pinsalt ); ?>">
+					<?php
+					if ( $pins_image_hover ) :
+						?>
+						<img src="<?php echo esc_attr( $pins_image_hover ); ?>" class="pins_image_hover 
+						<?php
+						if ( ! $no_tooltip ) :
+							?>
+						image_points_hastooltip<?php endif; ?>"  style="top:-<?php echo esc_attr( $pins_more_option['custom_hover_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_hover_left'] ); ?>px" alt="<?php echo esc_attr( $pinsalt ); ?>"><?php endif; ?>
+>>>>>>> adfd36e82ddd40c70a55cb4608469da8d0bb6e9c
 					<?php
 					if ( $linkpins ) :
 						?>
@@ -183,7 +217,11 @@ function image_points_shortcode_func( $atts ) {
 					++$stt;
 endforeach;
 				?>
+<<<<<<< HEAD
 						<?php endif; ?>
+=======
+						<?php endif; ?> 		 	
+>>>>>>> adfd36e82ddd40c70a55cb4608469da8d0bb6e9c
 	</div>
 	</div>
 	</div>

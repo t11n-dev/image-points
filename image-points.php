@@ -579,6 +579,12 @@ add_action( 'admin_print_styles', 'image_points_admin_styles' );
  */
 function image_points_frontend_scripts() {
 	if ( IMAGE_POINTS_DEV_MOD ) {
+<<<<<<< HEAD
+=======
+		wp_enqueue_style( 'powertip', plugin_dir_url( __FILE__ ) . 'frontend/css/jquery.powertip.min.css', array(), '1.2.0', 'all' );
+		wp_enqueue_script( 'powertip', plugin_dir_url( __FILE__ ) . 'frontend/js/jquery.powertip.min.js', array( 'jquery' ), '1.2.0', true );
+
+>>>>>>> adfd36e82ddd40c70a55cb4608469da8d0bb6e9c
 		wp_enqueue_style( 'image-points', plugin_dir_url( __FILE__ ) . 'frontend/css/image_points.css', array(), IMAGE_POINTS_VER, 'all' );
 		wp_enqueue_script( 'image-points', plugin_dir_url( __FILE__ ) . 'frontend/js/image_points.js', array( 'jquery' ), IMAGE_POINTS_VER, true );
 	} else {
