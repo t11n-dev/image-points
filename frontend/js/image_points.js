@@ -78,23 +78,29 @@
 			pinTopOffset = Math.abs(parseInt($pinImg.css('top'), 10) || 12);
 		}
 
-		console.log(arrowDir);
+		// Check user logged in (has id="wpadminbar")
+		var isLoggedin = $('#wpadminbar').length;
+		var offsetAdminBar = 0;
+		if (isLoggedin > 0) {
+			offsetAdminBar = 32;
+		} else {
+		}
 
 		switch (arrowDir) {
 			case 'n':
-				top = centerY - pinTopOffset - tipHeight - 40;
+				top = centerY - pinTopOffset - tipHeight - 12 - offsetAdminBar;
 				left = centerX - (tipWidth / 2);
 				break;
 			case 's':
-				top = centerY + pinTopOffset + tipHeight + 40;
+				top = centerY + pinTopOffset + tipHeight + 12 - offsetAdminBar;
 				left = centerX - (tipWidth / 2);
 				break;
 			case 'e':
-				top = centerY - (tipHeight / 2) - 40;
+				top = centerY - (tipHeight / 2) - 12 - offsetAdminBar;
 				left = centerX + 10;
 				break;
 			case 'w':
-				top = centerY - (tipHeight / 2) - 40;
+				top = centerY - (tipHeight / 2) - 12 - offsetAdminBar;
 				left = centerX - tipWidth - 10;
 				break;
 			default:
