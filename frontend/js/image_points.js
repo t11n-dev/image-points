@@ -83,7 +83,6 @@
 		var offsetAdminBar = 0;
 		if (isLoggedin > 0) {
 			offsetAdminBar = 32;
-		} else {
 		}
 
 		switch (arrowDir) {
