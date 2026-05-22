@@ -369,7 +369,7 @@ msgid "Image Points"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "https://t11n.dev/image-points"
+msgid "https://t11n.dev/"
 msgstr ""
 
 #. Description of the plugin/theme

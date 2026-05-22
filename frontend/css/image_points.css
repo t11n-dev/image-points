@@ -1,4 +1,10 @@
-/* Removed global body override (was causing theme conflicts) */
+/**
+ * Image Points - Frontend Styles
+ *
+ * Handles pin animations, tooltip styling, and responsive layouts.
+ */
+
+/* Pin pulse animation */
 @-moz-keyframes Ani {
     0% {
         box-shadow: 0 0 0 rgba(255, 255, 255, 0);
@@ -68,53 +74,67 @@
     }
 }
 
-#powerTip {
-    background-color: #000;
+/* Custom tooltip */
+#imagePointsTip {
+    display: none;
+    position: absolute;
+    z-index: 2147483647;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    cursor: default;
+    max-width: 80vw;
+    box-sizing: border-box;
 }
 
-#powerTip.n:before {
-    border-top: 10px solid rgba(0, 0, 0, 1);
+#imagePointsTip.ipt-active {
+    display: block !important;
 }
 
-#powerTip.s:before {
-    border-bottom: 10px solid #000;
+#imagePointsTip:before {
+    content: "";
+    position: absolute;
 }
 
-#powerTip.e:before {
-    border-right: 10px solid #000;
+#imagePointsTip.ipt-n:before {
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid rgba(0, 0, 0, 0.9);
+    bottom: -10px;
+    left: 50%;
+    margin-left: -8px;
 }
 
-#powerTip.w:before {
-    border-left: 10px solid #000;
-    right: -10px
+#imagePointsTip.ipt-s:before {
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid rgba(0, 0, 0, 0.9);
+    top: -10px;
+    left: 50%;
+    margin-left: -8px;
 }
 
-#powerTip.ne:before,
-#powerTip.nw:before {
-    border-top: 10px solid #000;
-    border-top: 10px solid rgba(0, 0, 0, 1);
+#imagePointsTip.ipt-e:before {
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 10px solid rgba(0, 0, 0, 0.9);
+    left: -10px;
+    top: 50%;
+    margin-top: -8px;
 }
 
-#powerTip.se:before,
-#powerTip.sw:before {
-    border-bottom: 10px solid #000;
-    border-bottom: 10px solid rgba(0, 0, 0, 1);
+#imagePointsTip.ipt-w:before {
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 10px solid rgba(0, 0, 0, 0.9);
+    right: -10px;
+    top: 50%;
+    margin-top: -8px;
 }
 
-#powerTip.nw-alt:before,
-#powerTip.ne-alt:before,
-#powerTip.sw-alt:before,
-#powerTip.se-alt:before {
-    border-top: 10px solid #000;
-    border-top: 10px solid rgba(0, 0, 0, 1);
-}
-
-#powerTip.sw-alt:before,
-#powerTip.se-alt:before {
-    border-bottom: 10px solid #000;
-    border-bottom: 10px solid rgba(0, 0, 0, 1);
-}
-
+/* Layout */
 .wrap_svl {
     position: relative;
     display: inline-block;
@@ -132,7 +152,6 @@
     line-height: normal;
 }
 
-/* clearfix removed — inline-block doesn't need it */
 .images_wrap img {
     width: 100%;
     height: auto;
@@ -170,15 +189,25 @@
     padding: 0;
 }
 
-body .wrap_svl img.pins_image_hover,
+.image_points_hastooltip {
+    cursor: pointer;
+}
+
+body .wrap_svl img.pins_image_hover {
+    display: block !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
 body .wrap_svl .point_style.has-hover:hover img.pins_image {
-    display: none !important;
+    opacity: 0;
 }
 
 body .wrap_svl .point_style.has-hover:hover img.pins_image_hover {
-    display: block !important;
+    opacity: 1;
 }
 
+/* Tooltip content styling */
 .tolltip_points {
     text-align: center;
 }
@@ -320,17 +349,11 @@ body .point_style img {
     max-width: inherit !important;
     vertical-align: inherit;
     border-radius: 0 !important;
-    ;
     -moz-border-radius: 0 !important;
-    ;
     -webkit-border-radius: 0 !important;
-    ;
     box-shadow: none !important;
-    ;
     -moz-box-shadow: none !important;
-    ;
     -webkit-box-shadow: none !important;
-    ;
 }
 
 .pins_animation {
@@ -367,7 +390,7 @@ span.close_image_points svg {
 }
 
 @media (max-width: 500px) {
-    .image_points_popup_full div#powerTip {
+    .image_points_popup_full #imagePointsTip {
         position: fixed;
         top: 0 !important;
         left: 0 !important;
