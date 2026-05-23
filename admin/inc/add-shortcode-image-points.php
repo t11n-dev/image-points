@@ -61,7 +61,7 @@ function image_points_shortcode_func( $atts ) {
 		?>
 	<div class="wrap_svl_center">
 	<div class="wrap_svl_center_box">
-	<div class="wrap_svl" id="body_drag_<?php echo esc_attr( $id_post ); ?>" data-trigger="<?php echo esc_attr( $tooltip_trigger ); ?>" data-theme="<?php echo esc_attr( $tooltip_theme ); ?>">
+		<div class="wrap_svl" id="body_drag_<?php echo esc_attr( $id_post ); ?>" data-trigger="<?php echo esc_attr( $tooltip_trigger ); ?>" data-theme="<?php echo esc_attr( $tooltip_theme ); ?>">
 		<div class="images_wrap">
 			<?php
 			if ( $image_points_main_image ) :

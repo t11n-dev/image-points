@@ -177,6 +177,8 @@ function image_points_meta_box_callback( $post ) {
 	$pins_image_hover = ( isset( $data_post['pins_image_hover'] ) ) ? $data_post['pins_image_hover'] : '';
 	$tooltip_trigger  = ( isset( $data_post['tooltip_trigger'] ) ) ? $data_post['tooltip_trigger'] : 'click';
 	$tooltip_theme    = ( isset( $data_post['tooltip_theme'] ) ) ? $data_post['tooltip_theme'] : 'dark';
+	$pin_style        = ( isset( $data_post['pin_style'] ) ) ? $data_post['pin_style'] : 'image';
+	$tooltip_layout   = ( isset( $data_post['tooltip_layout'] ) ) ? $data_post['tooltip_layout'] : 'floating';
 	$pins_more_option = ( isset( $data_post['pins_more_option'] ) ) ? $data_post['pins_more_option'] : array();
 	$pins_more_option = wp_parse_args(
 		$pins_more_option,
@@ -541,6 +543,8 @@ function image_points_save_meta_box_data( $post_id ) {
 		'pins_image_hover'        => isset( $_POST['pins_image_hover'] ) ? sanitize_text_field( wp_unslash( $_POST['pins_image_hover'] ) ) : '',
 		'tooltip_trigger'         => isset( $_POST['tooltip_trigger'] ) ? sanitize_text_field( wp_unslash( $_POST['tooltip_trigger'] ) ) : 'click',
 		'tooltip_theme'           => isset( $_POST['tooltip_theme'] ) ? sanitize_text_field( wp_unslash( $_POST['tooltip_theme'] ) ) : 'dark',
+		'pin_style'               => isset( $_POST['pin_style'] ) ? sanitize_text_field( wp_unslash( $_POST['pin_style'] ) ) : 'image',
+		'tooltip_layout'          => isset( $_POST['tooltip_layout'] ) ? sanitize_text_field( wp_unslash( $_POST['tooltip_layout'] ) ) : 'floating',
 		'pins_more_option'        => $pins_more_option,
 		'data_points'             => $data_points,
 	);
@@ -623,6 +627,13 @@ function image_points_admin_styles() {
 	if ( 'image_points' === $typenow ) {
 		wp_enqueue_style( 'bootstrap', plugin_dir_url( __FILE__ ) . 'admin/css/bootstrap.css', array(), IMAGE_POINTS_VER, 'all' );
 		wp_enqueue_style( 'image_points', plugin_dir_url( __FILE__ ) . 'admin/css/image_points_style.css', array(), IMAGE_POINTS_VER, 'all' );
+		
+		// Enqueue frontend styles in admin for live preview fidelity
+		if ( IMAGE_POINTS_DEV_MOD ) {
+			wp_enqueue_style( 'image_points_frontend', plugin_dir_url( __FILE__ ) . 'frontend/css/image_points.css', array(), IMAGE_POINTS_VER, 'all' );
+		} else {
+			wp_enqueue_style( 'image_points_frontend', plugin_dir_url( __FILE__ ) . 'frontend/css/image_points.min.css', array(), IMAGE_POINTS_VER, 'all' );
+		}
 	}
 }
 add_action( 'admin_print_styles', 'image_points_admin_styles' );

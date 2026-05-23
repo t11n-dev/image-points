@@ -136,18 +136,19 @@
 	 * Show tooltip for a target element.
 	 */
 	function showTooltip($target, html, placement) {
-		var $tip = getTooltip();
+		var $wrap = $target.closest('.wrap_svl');
 
 		// Close any existing tooltip first
 		if (activeTarget && activeTarget[0] !== $target[0]) {
 			hideTooltip();
 		}
 
-		$tip.html(html);
 		activeTarget = $target;
+
+		var $tip = getTooltip();
+		$tip.html(html);
 		positionTooltip($target, placement);
 		
-		var $wrap = $target.closest('.wrap_svl');
 		var themeMode = $wrap.length ? ($wrap.data('theme') || 'dark') : 'dark';
 		$tip.removeClass('ipt-theme-dark ipt-theme-light').addClass('ipt-theme-' + themeMode);
 		
