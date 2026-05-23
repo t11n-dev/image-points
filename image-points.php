@@ -10,7 +10,7 @@ Plugin Name: Image Points
 Plugin URI: https://image-points.t11n.dev/
 Description: Image Points helps you add interactive points to your images.
 Author: T11N
-Version: 1.0.0
+Version: 1.1.0
 Author URI: https://t11n.dev/
 Text Domain: image-points
 Domain Path: /languages
@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 
-define( 'IMAGE_POINTS_VER', '1.0.0' );
+define( 'IMAGE_POINTS_VER', '1.1.0' );
 define( 'IMAGE_POINTS_DEV_MOD', false );
 define( 'IMAGE_POINTS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'IMAGE_POINTS_URL', plugin_dir_url( __FILE__ ) );

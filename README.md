@@ -3,9 +3,9 @@
 ![WordPress](https://img.shields.io/badge/WordPress-6.9-blue?logo=wordpress)
 ![PHP](https://img.shields.io/badge/PHP-7.4+-purple?logo=php)
 ![License](https://img.shields.io/badge/License-GPLv3-green)
-![Version](https://img.shields.io/badge/Version-1.0.0-orange)
+![Version](https://img.shields.io/badge/Version-1.1.0-orange)
 
-> Add interactive hotspot pins to your images with drag & drop. Fully responsive. Zero bloat.
+> Add interactive responsive hotspot pins to your images with an intuitive drag & drop dashboard. Fully responsive. Zero bloat.
 
 ---
 
@@ -13,16 +13,18 @@
 
 | Feature | Description |
 |---------|-------------|
-| 🖱️ **Drag & Drop** | Place pins on images intuitively in the admin |
-| 📝 **Rich Tooltips** | TinyMCE editor for HTML content in each pin |
-| 🎨 **Custom Icons** | Upload different pin & hover icons per point |
-| 🔗 **Link Support** | Add URLs with `_self` / `_blank` target per pin |
-| 📱 **Responsive** | Percentage-based positioning — pins stay accurate at any screen size |
-| 💫 **Pulse Animation** | Optional pulse effect to draw attention |
-| 🧭 **8 Directions** | Tooltip placement: N, S, E, W, NE, NW, SE, SW with smart auto-placement |
+| 🖱️ **Drag & Drop** | Place pins on images intuitively using a completely redesigned grid dashboard |
+| 🪟 **Glassmorphism Modal** | Beautiful semi-transparent glass editor popup for annotating points in the admin |
+| 📝 **Rich Tooltips** | TinyMCE editor for full custom HTML/media content in each pin |
+| 🎨 **Theme Selection** | Choose between **Dark Theme** or **Light Theme** styles independently for tooltips |
+| ⚡ **Trigger Modes** | Supports **Click** or smooth **Hover (Rê chuột)** tooltip triggers |
+| 🎨 **Custom Icons** | Upload custom pin & hover icons independently per hotspot point |
+| 🔗 **Link Support** | Add links with custom `_self` or `_blank` window target per pin |
+| 📱 **100% Responsive** | Percentage-based positioning — pins stay perfectly aligned at any screen size |
+| 💫 **Pulse Animation** | Optional pulsing indicator ring to draw visitor attention |
+| 🧭 **8 Directions** | Tooltip directions (N, S, E, W, NE, NW, SE, SW) with smart boundary auto-placement |
 | 📋 **Shortcode** | Simple embed: `[image_points id="123"]` |
-| 🌐 **i18n Ready** | Full `.pot` file included for translations |
-| ⚡ **Lightweight** | No frameworks. jQuery + PowerTip only |
+| ⚡ **Vanilla Performance** | Completely custom lightweight core tooltip engine under 5KB JS. No bloat. |
 
 ---
 
