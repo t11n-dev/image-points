@@ -146,6 +146,11 @@
 		$tip.html(html);
 		activeTarget = $target;
 		positionTooltip($target, placement);
+		
+		var $wrap = $target.closest('.wrap_svl');
+		var themeMode = $wrap.length ? ($wrap.data('theme') || 'dark') : 'dark';
+		$tip.removeClass('ipt-theme-dark ipt-theme-light').addClass('ipt-theme-' + themeMode);
+		
 		$tip.addClass('ipt-active');
 	}
 
@@ -177,6 +182,9 @@
 				$targets = $source;
 			}
 
+			var $wrap = $source.closest('.wrap_svl');
+			var triggerMode = $wrap.length ? ($wrap.data('trigger') || 'click') : 'click';
+
 			$targets.each(function () {
 				var $target = $(this);
 
@@ -189,17 +197,45 @@
 					$target.removeAttr('title');
 				}
 
-				$target.on('click.imagePoints', function (event) {
-					event.preventDefault();
-					event.stopPropagation();
-
-					// Toggle: if clicking same target, hide
-					if (activeTarget && activeTarget[0] === $target[0]) {
-						hideTooltip();
-					} else {
+				if (triggerMode === 'hover') {
+					$target.on('mouseenter.imagePoints', function (event) {
+						clearTimeout($target.data('imagePointsHoverTimeout'));
 						showTooltip($target, tooltipHtml, thisPlace);
-					}
-				});
+					});
+
+					$target.on('mouseleave.imagePoints', function (event) {
+						var hoverTimeout = setTimeout(function () {
+							if (!getTooltip().is(':hover') && activeTarget && activeTarget[0] === $target[0]) {
+								hideTooltip();
+							}
+						}, 150);
+						$target.data('imagePointsHoverTimeout', hoverTimeout);
+					});
+
+					getTooltip().off('mouseenter.imagePointsTheme mouseleave.imagePointsTheme');
+					getTooltip().on('mouseenter.imagePointsTheme', function () {
+						if (activeTarget && activeTarget[0] === $target[0]) {
+							clearTimeout($target.data('imagePointsHoverTimeout'));
+						}
+					});
+					getTooltip().on('mouseleave.imagePointsTheme', function () {
+						if (activeTarget && activeTarget[0] === $target[0]) {
+							hideTooltip();
+						}
+					});
+				} else {
+					$target.on('click.imagePoints', function (event) {
+						event.preventDefault();
+						event.stopPropagation();
+
+						// Toggle: if clicking same target, hide
+						if (activeTarget && activeTarget[0] === $target[0]) {
+							hideTooltip();
+						} else {
+							showTooltip($target, tooltipHtml, thisPlace);
+						}
+					});
+				}
 
 				$target.data('imagePointsTooltipReady', true);
 			});

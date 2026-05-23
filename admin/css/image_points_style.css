@@ -1,27 +1,42 @@
-.image_points_row,
-.image_points_col_3 {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
+/**
+ * Image Points - Premium Admin Custom Styles
+ *
+ * Implements a modern dashboard edit grid, glassmorphic popups,
+ * and high-fidelity inputs matching modern WordPress design standards.
+ */
+
+/* ==========================================================================
+   1. Drag & Drop Container Wrapper
+   ========================================================================== */
+.wrap_svl {
+    position: relative;
+    float: left;
+    border: 2px dashed #ccd0d4;
+    border-radius: 12px;
+    background: #f0f0f1;
+    background-image: linear-gradient(45deg, #f6f6f7 25%, transparent 25%), 
+                      linear-gradient(-45deg, #f6f6f7 25%, transparent 25%), 
+                      linear-gradient(45deg, transparent 75%, #f6f6f7 75%), 
+                      linear-gradient(-45deg, transparent 75%, #f6f6f7 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    max-width: 100%;
+    padding: 0;
+    margin-top: 15px;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.wrap_svl:hover {
+    border-color: #2271b1;
 }
 
 .images_wrap img {
     width: 100%;
     height: auto;
     display: block;
-}
-
-.wrap_svl {
-    position: relative;
-    float: left;
-    border: 1px solid #000;
-    max-width: 100%;
-}
-
-.wrap_svl:after {
-    content: "";
-    display: table;
-    clear: both;
+    border-radius: 10px;
 }
 
 .drag_element {
@@ -29,164 +44,148 @@
     top: 0;
     left: 0;
     cursor: move;
-    min-width: 1px;
-    min-height: 1px;
-}
-
-.icon_wrap {
-    display: block;
-    width: 100%;
-    margin: 10px 0 0 0;
-    background: #ccc;
-    text-align: center;
-    padding: 10px;
-}
-
-.icon_wrap img {
-    max-width: 100%;
-    height: auto;
+    z-index: 100;
 }
 
 .point_style {
     position: relative;
-    z-index: 10;
     display: block;
-    -webkit-transition: all .3s ease-in-out;
-    -moz-transition: all .3s ease-in-out;
-    -o-transition: all .3s ease-in-out;
-    -ms-transition: all .3s ease-in-out;
     box-sizing: border-box;
     text-align: center;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+    transition: transform 0.15s ease-in-out;
+}
+
+.point_style:hover {
+    transform: scale(1.15);
+    z-index: 110;
 }
 
 .point_style img {
     position: absolute;
     top: 0;
     left: 0;
+    border-radius: 0 !important;
 }
 
-@-moz-keyframes Ani {
-    0% {
-        box-shadow: 0 0 0 rgba(255, 255, 255, 0);
-        border: 1px solid rgba(255, 255, 255, 0);
-        -webkit-transform: scale(0);
-        transform: scale(0)
-    }
-
-    70% {
-        box-shadow: 0 0 50px #fff;
-        border: 1px solid #fff;
-        -webkit-transform: scale(1);
-        transform: scale(1)
-    }
-
-    100% {
-        box-shadow: 0 0 60px rgba(255, 255, 255, 0);
-        border: 0 solid rgba(255, 255, 255, 0);
-        -webkit-transform: scale(1.5);
-        transform: scale(1.5)
-    }
-}
-
-@-webkit-keyframes Ani {
-    0% {
-        box-shadow: 0 0 0 rgba(255, 255, 255, 0);
-        border: 1px solid rgba(255, 255, 255, 0);
-        -webkit-transform: scale(0);
-        transform: scale(0)
-    }
-
-    70% {
-        box-shadow: 0 0 50px #fff;
-        border: 1px solid #fff;
-        -webkit-transform: scale(1);
-        transform: scale(1)
-    }
-
-    100% {
-        box-shadow: 0 0 60px rgba(255, 255, 255, 0);
-        border: 0 solid rgba(255, 255, 255, 0);
-        -webkit-transform: scale(1.5);
-        transform: scale(1.5)
-    }
-}
-
-@keyframes Ani {
-    0% {
-        box-shadow: 0 0 0 rgba(255, 255, 255, 0);
-        border: 1px solid rgba(255, 255, 255, 0);
-        -webkit-transform: scale(0);
-        transform: scale(0)
-    }
-
-    70% {
-        box-shadow: 0 0 50px #fff;
-        border: 1px solid #fff;
-        -webkit-transform: scale(1);
-        transform: scale(1)
-    }
-
-    100% {
-        box-shadow: 0 0 60px rgba(255, 255, 255, 0);
-        border: 0 solid rgba(255, 255, 255, 0);
-        -webkit-transform: scale(1.5);
-        transform: scale(1.5)
-    }
-}
-
-.point_style a {
-    display: block;
-    line-height: 0;
-}
-
-.media-modal {
-    z-index: 16000000 !important;
-}
-
-.button_done input {
-    width: auto;
-    margin: 0px 0 0px 10px !important;
-}
-
-.button_done {
-    text-align: center;
-    margin: 20px 0 0 0;
-}
-
-input.shortcodemap {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    background: #eee;
-    width: 100%;
-    padding: 10px;
-}
-
+/* ==========================================================================
+   2. Modern Settings Grid Table
+   ========================================================================== */
 .svl-table {
-    border: #DFDFDF solid 1px;
-    background: #fff;
-    border-spacing: 0;
-    border-radius: 0;
-    table-layout: auto;
-    padding: 0;
-    margin: 0;
     width: 100%;
-    clear: both;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    border-spacing: 0;
+    margin-bottom: 25px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    overflow: hidden;
+}
+
+.svl-table td {
+    padding: 16px 20px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.svl-table tr:last-child td {
+    border-bottom: none;
 }
 
 .svl-table td.svl-label {
-    background: #F9F9F9;
-    border-bottom: 1px solid #F0F0F0;
-    width: 24%;
-    padding: 10px 15px;
+    background: #f8fafc;
+    width: 25%;
+    font-weight: 600;
+    color: #1e293b;
+    border-right: 1px solid #f1f5f9;
+}
+
+/* Positions wrap layout */
+.pins-position-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.pins-position-wrap p {
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+
+.pins-position-wrap label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #475569;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.pins-position-wrap input[type="radio"] {
+    margin: 0;
+}
+
+.pins-position-wrap input[type="number"] {
+    width: 70px;
+    padding: 3px 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    margin-left: 4px;
+}
+
+/* ==========================================================================
+   3. File Upload and Previews
+   ========================================================================== */
+.svl-upload-image {
+    display: inline-block;
+}
+
+.view-has-value {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px;
+    background: #f8fafc;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.view-has-value img.image_view {
+    max-height: 50px;
+    max-width: 120px;
+    display: block;
+    height: auto;
+    object-fit: contain;
+}
+
+a.svl-delete-image {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ef4444;
+    color: #ffffff;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 18px;
+    display: none;
+    text-decoration: none;
+    font-size: 13px;
     font-weight: 700;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.svl-table td.svl-input {
-    border-bottom: 1px solid #F0F0F0;
-    padding: 10px 15px;
-    vertical-align: middle;
+.view-has-value:hover a.svl-delete-image {
+    display: block;
 }
 
+/* Toggle visibility wrappers */
 .has-image > .hidden-has-value,
 .view-has-value {
     display: none !important;
@@ -197,174 +196,157 @@ input.shortcodemap {
     display: inline-block !important;
 }
 
-.view-has-value {
-    position: relative;
-    float: left;
-}
-
-a.svl-delete-image {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.62);
-    color: #fff;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    text-align: center;
-    line-height: 22px;
-    display: block;
-    text-decoration: none;
-    font-size: 20px;
-    display: none;
-}
-
-.view-has-value:hover a.svl-delete-image {
-    display: block;
-}
-
-table.svl-table tr:last-child td {
-    border-bottom: 0;
-}
-
-.svl-control:after,
-.svl-image-wrap:after {
-    display: table;
-    content: "";
-    clear: both;
-}
-
-.svl-image-wrap {
-    margin: 20px 0 0 0;
-}
-
-input#meta-image-button {
-    float: left;
-    margin: 0 10px 0 0;
-}
-
+/* ==========================================================================
+   4. Control Bar actions
+   ========================================================================== */
 .svl-control {
-    margin: 0 0 20px 0;
-}
-
-.pins-position-wrap label {
-    width: 33.33%;
-    display: block;
-    float: left;
-    margin: 0 0 10px;
-}
-
-.pins-position-wrap label:nth-child(3n+1) {
-    clear: both;
-}
-
-.pins-position-wrap input[type="number"] {
-    width: 60px;
-}
-
-.svl-upload-image:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-img.image_view {
-    max-width: 100%;
-}
-
-.mce-widget.mce-fullscreen {
-    display: none !important;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .svl-control .spinner {
     float: none;
+    margin: 0;
     display: inline-block;
+    vertical-align: middle;
 }
 
 .svl-control.adding_point .spinner {
     visibility: visible;
 }
 
-div#misc-publishing-actions #visibility {
-    display: none;
-}
-
-.wp-core-ui .button.button-danger {
-    color: #fff;
-    background-color: #d9534f;
-    border-color: #d43f3a;
-}
-
-.wp-core-ui .button.button-danger:hover {
-    color: #fff;
-    background-color: #c9302c;
-    border-color: #ac2925;
-}
-
-.image_points_row {
-    margin: 10px -5px;
-    overflow: hidden;
-}
-
-.image_points_col_3 {
-    padding: 0 5px;
-    width: 33.333%;
-    float: left;
-}
-
-.image_points_row input[type="text"],
-.image_points_row select {
-    width: 100%;
-}
-
-body div#body_drag .point_style img {
-    max-width: inherit !important;
-}
-
-.image_points_list_points {
-    display: none;
-}
-
-/* Outer */
+/* ==========================================================================
+   5. Glassmorphism Edit Modal Popup
+   ========================================================================== */
 .image-points-popup {
     width: 100%;
     height: 100%;
     display: none;
     position: fixed;
-    top: 0px;
-    left: 0px;
-    background: rgba(0, 0, 0, 0.75);
-    z-index: 99999;
-}
-
-/* Inner */
-.image-points-popup-inner {
-    max-width: 700px;
-    width: 90%;
-    padding: 10px;
-    position: relative;
-    top: 10px;
-    left: 50%;
-    -webkit-transform: translate(-50%, 0);
-    transform: translate(-50%, 0);
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 1);
-    border-radius: 3px;
-    background: #fff;
-    max-height: 100%;
-    max-height: calc(100% - 40px);
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-body.rtl .image-points-popup-inner {
+    top: 0;
     left: 0;
-}
-.image-points-popup-modal-header h3 {
-    display: block;
-    margin: -5px 0 10px 0;
+    background: rgba(15, 23, 42, 0.65); /* Slate mask */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 99999;
+    animation: fadeInModal 0.25s ease-out;
 }
 
+.image-points-popup-inner {
+    max-width: 720px;
+    width: 90%;
+    padding: 30px;
+    position: relative;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    max-height: 90%;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.image-points-popup-modal-header {
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.image-points-popup-modal-header h3.modal-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+/* Inner input rows styling */
+.image_points_row {
+    margin: 15px -8px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.image_points_col_3 {
+    padding: 0 8px;
+    width: 33.333%;
+    box-sizing: border-box;
+}
+
+.image_points_row label {
+    font-weight: 600;
+    color: #475569;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.image_points_row input[type="text"],
+.image_points_row select {
+    width: 100%;
+    padding: 6px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #0f172a;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.image_points_row input[type="text"]:focus,
+.image_points_row select:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+/* Modal Actions footer */
 .image-points-popup-modal-footer {
-    text-align: right;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 20px;
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.wp-core-ui .button.button-danger {
+    color: #ffffff;
+    background-color: #ef4444;
+    border-color: #ef4444;
+    font-weight: 500;
+}
+
+.wp-core-ui .button.button-danger:hover,
+.wp-core-ui .button.button-danger:focus {
+    background-color: #dc2626;
+    border-color: #dc2626;
+    color: #ffffff;
+}
+
+.wp-core-ui .button.button-primary {
+    font-weight: 500;
+}
+
+/* Shortcode box inside metabox columns */
+input.shortcodemap {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: #f8fafc;
+    width: 100%;
+    padding: 10px 14px;
+    font-family: monospace;
+    font-size: 13px;
+    color: #a855f7;
+    font-weight: 600;
 }

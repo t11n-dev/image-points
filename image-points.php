@@ -175,6 +175,8 @@ function image_points_meta_box_callback( $post ) {
 
 	$pins_image       = ( isset( $data_post['pins_image'] ) ) ? $data_post['pins_image'] : '';
 	$pins_image_hover = ( isset( $data_post['pins_image_hover'] ) ) ? $data_post['pins_image_hover'] : '';
+	$tooltip_trigger  = ( isset( $data_post['tooltip_trigger'] ) ) ? $data_post['tooltip_trigger'] : 'click';
+	$tooltip_theme    = ( isset( $data_post['tooltip_theme'] ) ) ? $data_post['tooltip_theme'] : 'dark';
 	$pins_more_option = ( isset( $data_post['pins_more_option'] ) ) ? $data_post['pins_more_option'] : array();
 	$pins_more_option = wp_parse_args(
 		$pins_more_option,
@@ -246,6 +248,28 @@ function image_points_meta_box_callback( $post ) {
 						<p>
 								<label><input type="radio" name="pins_animation" value="none" <?php checked( 'none', $pins_more_option['pins_animation'] ); ?>><?php esc_html_e( 'None', 'image-points' ); ?></label>
 								<label><input type="radio" name="pins_animation" value="pulse" <?php checked( 'pulse', $pins_more_option['pins_animation'] ); ?>><?php esc_html_e( 'Pulse', 'image-points' ); ?></label>
+						</p>
+					</div>
+				</td>				
+			</tr>
+			<tr>
+				<td class="svl-label"><?php esc_html_e( 'Tooltip Trigger', 'image-points' ); ?></td>
+				<td class="svl-input">
+					<div class="pins-position-wrap">
+						<p>
+							<label><input type="radio" name="tooltip_trigger" value="click" <?php checked( 'click', $tooltip_trigger ); ?>><?php esc_html_e( 'Click', 'image-points' ); ?></label>
+							<label><input type="radio" name="tooltip_trigger" value="hover" <?php checked( 'hover', $tooltip_trigger ); ?>><?php esc_html_e( 'Hover', 'image-points' ); ?></label>
+						</p>
+					</div>
+				</td>				
+			</tr>
+			<tr>
+				<td class="svl-label"><?php esc_html_e( 'Tooltip Theme', 'image-points' ); ?></td>
+				<td class="svl-input">
+					<div class="pins-position-wrap">
+						<p>
+							<label><input type="radio" name="tooltip_theme" value="dark" <?php checked( 'dark', $tooltip_theme ); ?>><?php esc_html_e( 'Dark Theme', 'image-points' ); ?></label>
+							<label><input type="radio" name="tooltip_theme" value="light" <?php checked( 'light', $tooltip_theme ); ?>><?php esc_html_e( 'Light Theme', 'image-points' ); ?></label>
 						</p>
 					</div>
 				</td>				
@@ -515,6 +539,8 @@ function image_points_save_meta_box_data( $post_id ) {
 		'image_points_main_image' => $my_data,
 		'pins_image'              => isset( $_POST['pins_image'] ) ? sanitize_text_field( wp_unslash( $_POST['pins_image'] ) ) : '',
 		'pins_image_hover'        => isset( $_POST['pins_image_hover'] ) ? sanitize_text_field( wp_unslash( $_POST['pins_image_hover'] ) ) : '',
+		'tooltip_trigger'         => isset( $_POST['tooltip_trigger'] ) ? sanitize_text_field( wp_unslash( $_POST['tooltip_trigger'] ) ) : 'click',
+		'tooltip_theme'           => isset( $_POST['tooltip_theme'] ) ? sanitize_text_field( wp_unslash( $_POST['tooltip_theme'] ) ) : 'dark',
 		'pins_more_option'        => $pins_more_option,
 		'data_points'             => $data_points,
 	);
