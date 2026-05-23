@@ -15,24 +15,28 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # Fetch all history for tags push deletion
 
       - name: Create ZIP from repo
         run: |
           # Pack the files inside an 'image-points/' folder prefix for clean WP installations
           git archive --format=zip --prefix=image-points/ --output=image-points.zip HEAD
 
-      - name: Delete Old Latest Release
+      - name: Create or Recreate GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Safely delete the old 'Latest' release and clean up the remote tag if it exists
-          gh release delete Latest --yes --cleanup-tag || true
-
-      - name: Create New GitHub Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Create the fresh 'Latest' release, upload the zip, and tag it
+          # 1. Delete the existing release if it exists
+          gh release delete Latest --yes || true
+          
+          # 2. Force delete the remote tag from GitHub repository to avoid tag conflicts
+          git push origin :refs/tags/Latest || true
+          
+          # 3. Wait for 5 seconds to let GitHub's API backend propagate the deletion
+          sleep 5
+          
+          # 4. Create the fresh 'Latest' release, upload the zip, and tag it
           gh release create Latest image-points.zip \
             --target "$GITHUB_SHA" \
             --title "Image Points" \
