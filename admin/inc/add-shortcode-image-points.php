@@ -28,42 +28,13 @@ function image_points_shortcode_func( $atts ) {
 		return;
 	}
 
-	$data_post = get_post_meta( $id_post, 'image_points_content', true );
-
-	if ( ! is_serialized( $data_post ) && ! is_array( $data_post ) && is_string( $data_post ) ) {
-		$data_post = json_decode( $data_post, true );
-	}
-
-	if ( ! $data_post ) {
-		$post_content = get_post_field( 'post_content', $id_post );
-		if ( is_serialized( $post_content ) ) {
-			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize,WordPress.PHP.NoSilencedErrors.Discouraged -- Legacy content fallback with allowed_classes disabled.
-			$data_post = @unserialize( trim( $post_content ), array( 'allowed_classes' => false ) );
-		} else {
-			$data_post = $post_content;
-		}
-	}
+	$data_post = image_points_get_post_data( $id_post );
 
 	$image_points_main_image = ( isset( $data_post['image_points_main_image'] ) ) ? $data_post['image_points_main_image'] : '';
 	$data_points             = ( isset( $data_post['data_points'] ) ) ? $data_post['data_points'] : '';
 
 	if ( ! empty( $data_points ) ) {
-
-		$decoded_array = array();
-
-		foreach ( $data_points as $key => $array_value ) {
-			foreach ( $array_value as $key2 => $encoded_value ) {
-				if ( $encoded_value && is_string( $encoded_value ) && image_points_is_base64( $encoded_value ) ) {
-					// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Plugin stores sanitized point values as base64 strings.
-					$decoded_array[ $key ][ $key2 ] = base64_decode( $encoded_value );
-				} else {
-					$decoded_array[ $key ][ $key2 ] = $encoded_value;
-				}
-			}
-		}
-
-		$data_points = image_points_sanitize_data_points( $decoded_array );
-
+		$data_points = image_points_get_decoded_data_points( $data_points );
 	}
 
 	$pins_image       = ( isset( $data_post['pins_image'] ) ) ? $data_post['pins_image'] : '';
@@ -99,9 +70,10 @@ function image_points_shortcode_func( $atts ) {
 		</div>
 		<?php if ( is_array( $data_points ) ) : ?>
 				<?php
+				$allowed_tags = image_points_get_allowed_tags();
 				$stt = 1;foreach ( $data_points as $point ) :
-					$pins_image       = ( isset( $data_post['pins_image'] ) ) ? $data_post['pins_image'] : '';
-					$pins_image_hover = ( isset( $data_post['pins_image_hover'] ) ) ? $data_post['pins_image_hover'] : '';
+					$current_pins_image       = $pins_image;
+					$current_pins_image_hover = $pins_image_hover;
 
 					$linkpins                = isset( $point['linkpins'] ) ? esc_url( $point['linkpins'] ) : '';
 					$link_target             = isset( $point['link_target'] ) ? esc_attr( $point['link_target'] ) : '_self';
@@ -113,10 +85,10 @@ function image_points_shortcode_func( $atts ) {
 					$pinsalt                 = ( isset( $point['pinsalt'] ) && '' !== $point['pinsalt'] ) ? esc_attr( $point['pinsalt'] ) : '';
 
 					if ( $pins_image_custom ) {
-						$pins_image = $pins_image_custom;
+						$current_pins_image = $pins_image_custom;
 					}
 					if ( $pins_image_hover_custom ) {
-						$pins_image_hover = $pins_image_hover_custom;
+						$current_pins_image_hover = $pins_image_hover_custom;
 					}
 
 					$no_tooltip = false;
@@ -126,11 +98,10 @@ function image_points_shortcode_func( $atts ) {
 						<?php
 						if ( ! empty( $point['content'] ) ) :
 							$point_content = str_replace( '\"', '"', $point['content'] );
-							$allowed_tags  = image_points_get_allowed_tags();
 							$point_content = wp_kses( $point_content, $allowed_tags );
 							?>
 				<div class="box_view_html">
-					<?php echo wp_kses( wpautop( $point_content ), image_points_get_allowed_tags() ); ?>
+					<?php echo wp_kses( wpautop( $point_content ), $allowed_tags ); ?>
 				</div>
 							<?php
 			else :
@@ -146,7 +117,7 @@ function image_points_shortcode_func( $atts ) {
 					);
 					$pins_image_classes = array( 'pins_image' );
 
-					if ( $pins_image_hover ) {
+					if ( $current_pins_image_hover ) {
 						$point_classes[] = 'has-hover';
 					}
 
@@ -164,15 +135,15 @@ function image_points_shortcode_func( $atts ) {
 					<?php if ( 'none' !== $pins_more_option['pins_animation'] ) : ?>
 						<div class="pins_animation image_points_<?php echo esc_attr( $pins_more_option['pins_animation'] ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_left'] ); ?>px;height:<?php echo intval( $pins_more_option['custom_top'] * 2 ); ?>px;width:<?php echo intval( $pins_more_option['custom_left'] * 2 ); ?>px"></div>
 					<?php endif; ?>
-					<img src="<?php echo esc_attr( $pins_image ); ?>" class="<?php echo esc_attr( implode( ' ', $pins_image_classes ) ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_left'] ); ?>px" alt="<?php echo esc_attr( $pinsalt ); ?>">
+					<img src="<?php echo esc_attr( $current_pins_image ); ?>" class="<?php echo esc_attr( implode( ' ', $pins_image_classes ) ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_left'] ); ?>px" alt="<?php echo esc_attr( $pinsalt ); ?>">
 					<?php
-					if ( $pins_image_hover ) :
+					if ( $current_pins_image_hover ) :
 						$pins_image_hover_classes = array( 'pins_image_hover' );
 						if ( ! $no_tooltip ) {
 							$pins_image_hover_classes[] = 'image_points_hastooltip';
 						}
 						?>
-						<img src="<?php echo esc_attr( $pins_image_hover ); ?>" class="<?php echo esc_attr( implode( ' ', $pins_image_hover_classes ) ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_hover_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_hover_left'] ); ?>px" alt="<?php echo esc_attr( $pinsalt ); ?>"><?php endif; ?>
+						<img src="<?php echo esc_attr( $current_pins_image_hover ); ?>" class="<?php echo esc_attr( implode( ' ', $pins_image_hover_classes ) ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_hover_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_hover_left'] ); ?>px" alt="<?php echo esc_attr( $pinsalt ); ?>"><?php endif; ?>
 					<?php
 					if ( $linkpins ) :
 						?>

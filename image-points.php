@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 
 define( 'IMAGE_POINTS_VER', '1.0.0' );
-define( 'IMAGE_POINTS_DEV_MOD', true );
+define( 'IMAGE_POINTS_DEV_MOD', false );
 define( 'IMAGE_POINTS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'IMAGE_POINTS_URL', plugin_dir_url( __FILE__ ) );
 if ( ! defined( 'IMAGE_POINTS_BASENAME' ) ) {
@@ -130,22 +130,20 @@ function image_points_default_editor() {
 }
 
 /**
- * Render the main editor metabox.
+ * Retrieve and parse saved post meta configuration for Image Points.
  *
- * @param WP_Post $post Current post.
+ * @param int $post_id Post ID.
+ * @return array
  */
-function image_points_meta_box_callback( $post ) {
-	add_filter( 'wp_default_editor', 'image_points_default_editor' );
-	wp_nonce_field( 'image_points_save_meta_box_data', 'image_points_meta_box_nonce' );
-
-	$data_post = get_post_meta( $post->ID, 'image_points_content', true );
+function image_points_get_post_data( $post_id ) {
+	$data_post = get_post_meta( $post_id, 'image_points_content', true );
 
 	if ( ! is_serialized( $data_post ) && ! is_array( $data_post ) && is_string( $data_post ) ) {
 		$data_post = json_decode( $data_post, true );
 	}
 
 	if ( ! $data_post ) {
-		$post_content = $post->post_content;
+		$post_content = get_post_field( 'post_content', $post_id );
 		if ( is_serialized( $post_content ) ) {
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize,WordPress.PHP.NoSilencedErrors.Discouraged -- Legacy content fallback with allowed_classes disabled.
 			$data_post = @unserialize( trim( $post_content ), array( 'allowed_classes' => false ) );
@@ -154,26 +152,25 @@ function image_points_meta_box_callback( $post ) {
 		}
 	}
 
+	return is_array( $data_post ) ? $data_post : array();
+}
+
+/**
+ * Render the main editor metabox.
+ *
+ * @param WP_Post $post Current post.
+ */
+function image_points_meta_box_callback( $post ) {
+	add_filter( 'wp_default_editor', 'image_points_default_editor' );
+	wp_nonce_field( 'image_points_save_meta_box_data', 'image_points_meta_box_nonce' );
+
+	$data_post = image_points_get_post_data( $post->ID );
+
 	$image_points_main_image = ( isset( $data_post['image_points_main_image'] ) ) ? $data_post['image_points_main_image'] : '';
 	$data_points             = isset( $data_post['data_points'] ) && $data_post['data_points'] ? $data_post['data_points'] : array();
 
 	if ( ! empty( $data_points ) ) {
-
-		$decoded_array = array();
-
-		foreach ( $data_points as $key => $array_value ) {
-			foreach ( $array_value as $key2 => $encoded_value ) {
-				if ( $encoded_value && is_string( $encoded_value ) && image_points_is_base64( $encoded_value ) ) {
-					// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Plugin stores sanitized point values as base64 strings.
-					$decoded_array[ $key ][ $key2 ] = base64_decode( $encoded_value );
-				} else {
-					$decoded_array[ $key ][ $key2 ] = $encoded_value;
-				}
-			}
-		}
-
-		$data_points = image_points_sanitize_data_points( $decoded_array );
-
+		$data_points = image_points_get_decoded_data_points( $data_points );
 	}
 
 	$pins_image       = ( isset( $data_post['pins_image'] ) ) ? $data_post['pins_image'] : '';
@@ -406,6 +403,36 @@ function image_points_sanitize_data_points( $data_points ) {
 	}
 
 	return $sanitized_points;
+}
+
+/**
+ * Decode and sanitize raw data points array.
+ *
+ * @param array|string $data_points Raw point data.
+ * @return array
+ */
+function image_points_get_decoded_data_points( $data_points ) {
+	if ( empty( $data_points ) || ! is_array( $data_points ) ) {
+		return array();
+	}
+
+	$decoded_array = array();
+
+	foreach ( $data_points as $key => $array_value ) {
+		if ( ! is_array( $array_value ) ) {
+			continue;
+		}
+		foreach ( $array_value as $key2 => $encoded_value ) {
+			if ( $encoded_value && is_string( $encoded_value ) && image_points_is_base64( $encoded_value ) ) {
+				// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Plugin stores sanitized point values as base64 strings.
+				$decoded_array[ $key ][ $key2 ] = base64_decode( $encoded_value );
+			} else {
+				$decoded_array[ $key ][ $key2 ] = $encoded_value;
+			}
+		}
+	}
+
+	return image_points_sanitize_data_points( $decoded_array );
 }
 
 /**
@@ -807,12 +834,10 @@ function image_points_convert_array_data( $input_array = array() ) {
 		break;
 	}
 	$n_count_key = count( $input_array[ $first_key ] );
+	$allowed_tags = image_points_get_allowed_tags();
 	for ( $i = 0; $i < $n_count_key;$i++ ) {
 		$element = array();
 		foreach ( $input_array as $key => $value ) {
-
-			$allowed_tags = image_points_get_allowed_tags();
-
 			if ( 'content' === $key ) {
 				// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Encoded to preserve structured point content in post meta.
 				$element[ $key ] = base64_encode( wp_kses( $value[ $i ], $allowed_tags ) );
@@ -847,21 +872,26 @@ if ( ! function_exists( 'image_points_get_image_info_from_url' ) ) {
 		$attachment_id = wp_cache_get( $cache_key );
 
 		if ( false === $attachment_id ) {
-			$upload_dir    = wp_upload_dir();
-			$relative_path = str_replace( $upload_dir['baseurl'] . '/', '', $image_url );
+			// First, try standard WordPress function.
+			$attachment_id = attachment_url_to_postid( $image_url );
 
-            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching - No WordPress function exists to get attachment by file path, caching added above
-			$attachment_id = $wpdb->get_var(
-				$wpdb->prepare(
-					"
-                SELECT post_id FROM {$wpdb->postmeta}
-                WHERE meta_key = '_wp_attached_file'
-                AND meta_value = %s
-                LIMIT 1
-            ",
-					$relative_path
-				)
-			);
+			if ( ! $attachment_id ) {
+				$upload_dir    = wp_upload_dir();
+				$relative_path = str_replace( $upload_dir['baseurl'] . '/', '', $image_url );
+
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching - Fallback query, caching added above
+				$attachment_id = $wpdb->get_var(
+					$wpdb->prepare(
+						"
+					SELECT post_id FROM {$wpdb->postmeta}
+					WHERE meta_key = '_wp_attached_file'
+					AND meta_value = %s
+					LIMIT 1
+				",
+						$relative_path
+					)
+				);
+			}
 
 			wp_cache_set( $cache_key, $attachment_id, '', 3600 );
 		}

@@ -246,6 +246,8 @@
 		if ($top >= 100 && firstLoad) {
 			imagePointsInit();
 			firstLoad = false;
+			$(window).off('scroll', scroll_element);
+			$(window).off('touchmove', scroll_element);
 		}
 	}
 
