@@ -137,6 +137,7 @@
 	 */
 	function showTooltip($target, html, placement) {
 		var $wrap = $target.closest('.wrap_svl');
+		var layoutMode = $wrap.length ? ($wrap.attr('data-layout') || 'floating') : 'floating';
 
 		// Close any existing tooltip first
 		if (activeTarget && activeTarget[0] !== $target[0]) {
@@ -144,6 +145,21 @@
 		}
 
 		activeTarget = $target;
+
+		// Fallback to popover tooltips on small screens (less than 768px wide)
+		if (layoutMode === 'sidebar' && $(window).width() > 767) {
+			var $container = $wrap.parent('.wrap_svl_container_layout');
+			var $sidebar = $container.find('.ip-sidebar-panel');
+			if ($sidebar.length) {
+				$sidebar.find('.ip-sidebar-empty-state').css('display', 'none');
+				$sidebar.find('.ip-sidebar-content-view').html(html).css('display', 'block');
+				
+				// Highlight the active pin
+				$wrap.find('.drag_element').removeClass('ip-pin-active');
+				$target.closest('.drag_element').addClass('ip-pin-active');
+				return;
+			}
+		}
 
 		var $tip = getTooltip();
 		$tip.html(html);
@@ -159,6 +175,20 @@
 	 * Hide the active tooltip.
 	 */
 	function hideTooltip() {
+		if (activeTarget) {
+			var $wrap = activeTarget.closest('.wrap_svl');
+			var layoutMode = $wrap.length ? ($wrap.attr('data-layout') || 'floating') : 'floating';
+			if (layoutMode === 'sidebar' && $(window).width() > 767) {
+				var $container = $wrap.parent('.wrap_svl_container_layout');
+				var $sidebar = $container.find('.ip-sidebar-panel');
+				if ($sidebar.length) {
+					$sidebar.find('.ip-sidebar-empty-state').css('display', 'block');
+					$sidebar.find('.ip-sidebar-content-view').css('display', 'none').html('');
+					$wrap.find('.drag_element').removeClass('ip-pin-active');
+				}
+			}
+		}
+
 		if ($tooltip && $tooltip.length) {
 			$tooltip.removeClass('ipt-active').css('display', 'none').html('');
 		}
@@ -265,6 +295,19 @@
 
 	$(document).ready(function () {
 		imagePointsInit();
+
+		// Auto trigger first hotspot in wide screen sidebar layout on load
+		if ($(window).width() > 767) {
+			$('.wrap_svl_center.ip-layout-sidebar').each(function () {
+				var $container = $(this);
+				setTimeout(function() {
+					var $firstHotspot = $container.find('.image_points_hastooltip').first();
+					if ($firstHotspot.length) {
+						$firstHotspot.click();
+					}
+				}, 200);
+			});
+		}
 	});
 
 	// Hide tooltip on resize/rotate to prevent stale position

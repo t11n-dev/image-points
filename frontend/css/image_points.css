@@ -457,3 +457,225 @@ span.close_image_points svg {
         transform-origin: center;
     }
 }
+
+
+/* ==========================================================================
+   Modern Pulsing Hotspot CSS Pins
+   ========================================================================== */
+.ip-pin-css-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+.ip-pin-css {
+    position: relative;
+    width: 32px;
+    height: 32px;
+}
+
+.ip-pin-css .pin-marker {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 8px;
+    left: 8px;
+    background: #ffffff;
+    border: 3px solid #ec4899; /* secondary brand color */
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ip-pin-css .pulse-ring {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    top: 0;
+    left: 0;
+    border: 2px solid #a855f7; /* primary brand color */
+    border-radius: 50%;
+    box-sizing: border-box;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.ip-pin-css-wrapper:hover .pin-marker,
+.drag_element.ip-pin-active .pin-marker {
+    background: #a855f7;
+    border-color: #ffffff;
+    transform: scale(1.3);
+}
+
+/* Pulsing rings when active/hovered */
+.ip-pins-glowing .ip-pin-css .pulse-ring {
+    animation: ipRingPulse 2s infinite ease-out;
+}
+
+@keyframes ipRingPulse {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+}
+
+
+/* ==========================================================================
+   Switchable Layout Modes (Grid & Sidebar)
+   ========================================================================== */
+.wrap_svl_container_layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: stretch;
+    justify-content: center;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Toggle displays via outer wrapper classes */
+.ip-pins-image .ip-pin-image-wrapper {
+    display: block !important;
+}
+.ip-pins-image .ip-pin-css-wrapper {
+    display: none !important;
+}
+
+.ip-pins-glowing .ip-pin-image-wrapper {
+    display: none !important;
+}
+.ip-pins-glowing .ip-pin-css-wrapper {
+    display: block !important;
+}
+
+/* Sidebar Columns layout transition */
+.ip-layout-sidebar .wrap_svl_container_layout {
+    max-width: 1100px;
+}
+
+.ip-layout-sidebar .wrap_svl {
+    flex: 1 1 600px;
+    max-width: 100%;
+}
+
+.ip-layout-sidebar .ip-sidebar-panel {
+    display: flex !important;
+}
+
+/* Info Sidebar Panel Styles */
+.ip-sidebar-panel {
+    flex: 1 1 320px;
+    min-height: 300px;
+    border-radius: 16px;
+    padding: 30px;
+    box-sizing: border-box;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 10px 25px -10px rgba(15, 23, 42, 0.05);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.ip-sidebar-panel:hover {
+    border-color: rgba(236, 72, 153, 0.4);
+    box-shadow: 0 10px 30px -5px rgba(236, 72, 153, 0.05);
+}
+
+/* Sidebar Dark Theme support */
+.ip-sidebar-panel.ip-theme-dark {
+    background: rgba(15, 23, 42, 0.8);
+    color: #f8fafc;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+}
+.ip-sidebar-panel.ip-theme-dark:hover {
+    border-color: rgba(168, 85, 247, 0.4);
+}
+.ip-sidebar-panel.ip-theme-dark .ip-sidebar-empty-state {
+    color: #94a3b8;
+}
+.ip-sidebar-panel.ip-theme-dark .ip-sidebar-content-view h3 {
+    color: #ffffff;
+}
+
+/* Empty State representation */
+.ip-sidebar-empty-state {
+    text-align: center;
+    color: #64748b;
+}
+
+.ip-sidebar-icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 16px;
+    animation: ipPulseIcon 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes ipPulseIcon {
+    0% { transform: scale(1); filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.05)); }
+    100% { transform: scale(1.1); filter: drop-shadow(0 4px 12px rgba(168, 85, 247, 0.25)); }
+}
+
+.ip-sidebar-empty-state svg {
+    margin: 0 auto 16px;
+    stroke: currentColor;
+    display: block;
+}
+
+/* Dynamic content renderer */
+.ip-sidebar-content-view {
+    animation: ipSidebarFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: left;
+    width: 100%;
+}
+
+.ip-sidebar-content-view h3 {
+    margin-top: 0;
+    font-size: 20px;
+    margin-bottom: 12px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.ip-sidebar-content-view p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 12px;
+}
+
+@keyframes ipSidebarFadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Active glowing pin animations when Sidebar is selected */
+.drag_element.ip-pin-active .ip-pin-css .pin-marker {
+    background: #a855f7;
+    border-color: #ffffff;
+    transform: scale(1.3);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+}
+
+/* Responsive adjustments for Sidebar Panel on Small Screens */
+@media (max-width: 767px) {
+    /* On small screens, hide the sidebar panel and let wrap_svl expand to full width */
+    .ip-layout-sidebar .ip-sidebar-panel {
+        display: none !important;
+    }
+    .ip-layout-sidebar .wrap_svl {
+        flex: 1 1 100% !important;
+    }
+}
+

@@ -276,6 +276,28 @@ function image_points_meta_box_callback( $post ) {
 					</div>
 				</td>				
 			</tr>
+			<tr>
+				<td class="svl-label"><?php esc_html_e( 'Display Mode', 'image-points' ); ?></td>
+				<td class="svl-input">
+					<div class="pins-position-wrap">
+						<p>
+							<label><input type="radio" name="tooltip_layout" value="floating" <?php checked( 'floating', $tooltip_layout ); ?>><?php esc_html_e( 'Floating Tooltips', 'image-points' ); ?></label>
+							<label><input type="radio" name="tooltip_layout" value="sidebar" <?php checked( 'sidebar', $tooltip_layout ); ?>><?php esc_html_e( 'Right Sidebar Panel', 'image-points' ); ?></label>
+						</p>
+					</div>
+				</td>				
+			</tr>
+			<tr>
+				<td class="svl-label"><?php esc_html_e( 'Pin Style', 'image-points' ); ?></td>
+				<td class="svl-input">
+					<div class="pins-position-wrap">
+						<p>
+							<label><input type="radio" name="pin_style" value="image" <?php checked( 'image', $pin_style ); ?>><?php esc_html_e( 'Original Image', 'image-points' ); ?></label>
+							<label><input type="radio" name="pin_style" value="glowing" <?php checked( 'glowing', $pin_style ); ?>><?php esc_html_e( 'Glowing Pulse (CSS)', 'image-points' ); ?></label>
+						</p>
+					</div>
+				</td>				
+			</tr>
 		</tbody>
 	</table>
 	<div class="svl-image-wrap <?php echo ( $image_points_main_image ) ? 'has-image' : ''; ?>">

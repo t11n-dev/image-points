@@ -56,12 +56,18 @@ function image_points_shortcode_func( $atts ) {
 
 	$tooltip_trigger = ( isset( $data_post['tooltip_trigger'] ) ) ? $data_post['tooltip_trigger'] : 'click';
 	$tooltip_theme   = ( isset( $data_post['tooltip_theme'] ) ) ? $data_post['tooltip_theme'] : 'dark';
+	$pin_style       = ( isset( $data_post['pin_style'] ) ) ? $data_post['pin_style'] : 'image';
+	if ( in_array( $pin_style, array( 'glowing', 'glowing_purple', 'glowing_pink', 'numbered', 'plus_symbol' ) ) ) {
+		$pin_style = 'glowing';
+	}
+	$tooltip_layout  = ( isset( $data_post['tooltip_layout'] ) ) ? $data_post['tooltip_layout'] : 'floating';
 	ob_start();
 	if ( $image_points_main_image ) :
 		?>
-	<div class="wrap_svl_center">
-	<div class="wrap_svl_center_box">
-		<div class="wrap_svl" id="body_drag_<?php echo esc_attr( $id_post ); ?>" data-trigger="<?php echo esc_attr( $tooltip_trigger ); ?>" data-theme="<?php echo esc_attr( $tooltip_theme ); ?>">
+	<div class="wrap_svl_center ip-layout-<?php echo esc_attr( $tooltip_layout ); ?> ip-pins-<?php echo esc_attr( $pin_style ); ?>">
+		<div class="wrap_svl_center_box">
+			<div class="wrap_svl_container_layout">
+				<div class="wrap_svl" id="body_drag_<?php echo esc_attr( $id_post ); ?>" data-trigger="<?php echo esc_attr( $tooltip_trigger ); ?>" data-theme="<?php echo esc_attr( $tooltip_theme ); ?>" data-layout="<?php echo esc_attr( $tooltip_layout ); ?>">
 		<div class="images_wrap">
 			<?php
 			if ( $image_points_main_image ) :
@@ -135,18 +141,31 @@ function image_points_shortcode_func( $atts ) {
 					if ( $linkpins ) :
 						?>
 						<a href="<?php echo esc_attr( $linkpins ); ?>" title="" <?php echo ( $link_target ) ? 'target="' . esc_attr( $link_target ) . '"' : ''; ?>><?php endif; ?>
-					<?php if ( 'none' !== $pins_more_option['pins_animation'] ) : ?>
-						<div class="pins_animation image_points_<?php echo esc_attr( $pins_more_option['pins_animation'] ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_left'] ); ?>px;height:<?php echo intval( $pins_more_option['custom_top'] * 2 ); ?>px;width:<?php echo intval( $pins_more_option['custom_left'] * 2 ); ?>px"></div>
-					<?php endif; ?>
-					<img src="<?php echo esc_attr( $current_pins_image ); ?>" class="<?php echo esc_attr( implode( ' ', $pins_image_classes ) ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_left'] ); ?>px" alt="<?php echo esc_attr( $pinsalt ); ?>">
-					<?php
-					if ( $current_pins_image_hover ) :
-						$pins_image_hover_classes = array( 'pins_image_hover' );
-						if ( ! $no_tooltip ) {
-							$pins_image_hover_classes[] = 'image_points_hastooltip';
-						}
-						?>
-						<img src="<?php echo esc_attr( $current_pins_image_hover ); ?>" class="<?php echo esc_attr( implode( ' ', $pins_image_hover_classes ) ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_hover_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_hover_left'] ); ?>px" alt="<?php echo esc_attr( $pinsalt ); ?>"><?php endif; ?>
+					
+					<!-- 1. Original Image Pin Wrapper -->
+					<div class="ip-pin-image-wrapper">
+						<?php if ( 'none' !== $pins_more_option['pins_animation'] ) : ?>
+							<div class="pins_animation image_points_<?php echo esc_attr( $pins_more_option['pins_animation'] ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_left'] ); ?>px;height:<?php echo intval( $pins_more_option['custom_top'] * 2 ); ?>px;width:<?php echo intval( $pins_more_option['custom_left'] * 2 ); ?>px"></div>
+						<?php endif; ?>
+						<img src="<?php echo esc_attr( $current_pins_image ); ?>" class="<?php echo esc_attr( implode( ' ', $pins_image_classes ) ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_left'] ); ?>px" alt="<?php echo esc_attr( $pinsalt ); ?>">
+						<?php
+						if ( $current_pins_image_hover ) :
+							$pins_image_hover_classes = array( 'pins_image_hover' );
+							if ( ! $no_tooltip ) {
+								$pins_image_hover_classes[] = 'image_points_hastooltip';
+							}
+							?>
+							<img src="<?php echo esc_attr( $current_pins_image_hover ); ?>" class="<?php echo esc_attr( implode( ' ', $pins_image_hover_classes ) ); ?>" style="top:-<?php echo esc_attr( $pins_more_option['custom_hover_top'] ); ?>px;left:-<?php echo esc_attr( $pins_more_option['custom_hover_left'] ); ?>px" alt="<?php echo esc_attr( $pinsalt ); ?>"><?php endif; ?>
+					</div>
+
+					<!-- 2. Landing-page Style Pulsing Glowing Pin Wrapper -->
+					<div class="ip-pin-css-wrapper" style="display: none;">
+						<div class="ip-pin-css">
+							<div class="ip-pin-css-pulse"></div>
+							<div class="ip-pin-css-marker"></div>
+						</div>
+					</div>
+
 					<?php
 					if ( $linkpins ) :
 						?>
@@ -158,6 +177,17 @@ function image_points_shortcode_func( $atts ) {
 endforeach;
 				?>
 						<?php endif; ?>
+	</div>
+
+	<!-- 3. Dynamic Sidebar Panel -->
+	<div class="ip-sidebar-panel ip-theme-<?php echo esc_attr( $tooltip_theme ); ?>" style="display: none;">
+		<div class="ip-sidebar-empty-state">
+			<span class="ip-sidebar-icon">ℹ️</span>
+			<p><?php esc_html_e( 'Click any hotspot on the landscape to view dynamic details', 'image-points' ); ?></p>
+		</div>
+		<div class="ip-sidebar-content-view" style="display: none;"></div>
+	</div>
+
 	</div>
 	</div>
 	</div>
